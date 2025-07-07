@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://b1axlawjo8yy"]
+
+[ext_resource type="Texture2D" uid="uid://d852rku7q8jw" path="res://icon.svg" id="1_840f7"]
+[ext_resource type="Script" uid="uid://m7p0snswubcn" path="res://tests/character_body_2d.gd" id="1_oxs3c"]
+[ext_resource type="PackedScene" uid="uid://doyvpbmwb2npn" path="res://tests/state_display.tscn" id="3_c04wb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_oxs3c"]
+radius = 65.05
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+motion_mode = 1
+wall_min_slide_angle = 0.0
+script = ExtResource("1_oxs3c")
+speed = 640.0
+
+[node name="Icon" type="Sprite2D" parent="CharacterBody2D"]
+texture = ExtResource("1_840f7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("CircleShape2D_oxs3c")
+
+[node name="StateDisplay" parent="CharacterBody2D" instance=ExtResource("3_c04wb")]
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1.0
+offset_top = -108.0
+offset_right = 3.0
+offset_bottom = -108.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Camera2D" type="Camera2D" parent="."]

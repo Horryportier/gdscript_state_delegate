@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://doyvpbmwb2npn"]
+
+[ext_resource type="Script" uid="uid://oxbtiw13bved" path="res://tests/state_display.gd" id="1_jc56y"]
+
+[node name="StateDisplay" type="RichTextLabel"]
+offset_right = 40.0
+offset_bottom = 40.0
+bbcode_enabled = true
+fit_content = true
+autowrap_mode = 0
+script = ExtResource("1_jc56y")

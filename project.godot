@@ -11,5 +11,21 @@ config_version=5
 [application]
 
 config/name="gdscript_state_delegate"
+run/main_scene="uid://b1axlawjo8yy"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/gdstatedelegate/plugin.cfg")
+
+[file_customization]
+
+folder_colors={
+"res://addons/gdstatedelegate/src/": "yellow",
+"res://tests/": "gray"
+}
+
+[gd_state_delegate]
+
+paths/global_state="uid://cbajmnr7tf25r"
