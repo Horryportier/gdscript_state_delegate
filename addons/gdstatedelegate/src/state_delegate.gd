@@ -18,11 +18,18 @@ class State:
 	var exit: Callable
 	var name: String = "NONE"
 
+	var ctx_properties: Array[String] = []
+
 	func _init(_state: Callable, _enter: Callable, _exit: Callable, _name: String = "") -> void:
 		tick = _state
 		enter = _enter
 		exit = _exit
 		name = _name
+	
+	func add_ctx_properties(properties: Array[String]) -> State:
+		for p in properties:
+			self.ctx_properties.append(p)
+		return self
 	
 var _registry: Dictionary = {}
 
@@ -53,7 +60,7 @@ func add_state(state: Callable, name: String = "",  enter: Callable = _enter_sta
 func add_state_from_registry(id: String) -> Callable: 
 	if global_registry == null:
 		var global_registry_file: String = GdStateDelegateSettings.get_setting(GdStateDelegateSettings.GENERIC_STATE_PATH_FILE)
-		if global_registry_file != "":
+		if global_registry_file.is_absolute_path():
 			global_registry = load(global_registry_file).new()
 		else:
 			push_warning("global registry not specified go to settings -> gd_state_delegate/paths/global_states")
@@ -90,10 +97,13 @@ func get_state_name(state: Callable) -> String:
 	
 ## when called it will execute current state
 ## you can run it in proccess or on timer depending on your needs 
-func tick(ctx: Dictionary = {}) -> void:
+func tick(ctx: Dictionary = {}, validate_ctx: bool = false) -> void:
 	if !_state_tansition_complete:
 		return
 	var state: State = _registry.get(_current_state)
+	if validate_ctx and !ctx_has_all_required_properties(ctx, state):
+		push_warning("some parameters are not present for current state: %s needed: %s" % [state.name, state.ctx_properties])
+		return
 	var res: Variant = await state.tick.call(ctx)
 	match typeof(res):
 		TYPE_NIL:
@@ -103,6 +113,12 @@ func tick(ctx: Dictionary = {}) -> void:
 				push_warning("current state returned invalid state function")
 				return 
 			_handle_state_transition(_registry.get(res).tick, ctx)
+
+## cheacks if ctx has all requeired properties 
+## @warning dose not cheack type correctnes
+func ctx_has_all_required_properties(ctx: Dictionary, state: State) -> bool:
+	return ctx.has_all(state.ctx_properties)
+	
 
 func _handle_state_transition(new_state: Callable, ctx: Dictionary) -> void:
 	if _current_state != new_state:

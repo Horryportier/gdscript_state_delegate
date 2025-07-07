@@ -1,7 +1,11 @@
 extends GdStateDelegateRegistry
 
+static var follow_mouse_ctx: Array[String] = ["agent" , "target_property", "stop_follow_mouse_state", "speed_property"]
+
 static var registry: Dictionary = {
-	"follow_mouse": StateDelegate.State.new(_follow_mouse_state, _follow_mouse_enter_state, _follow_mouse_exit_state, "follow_mouse")
+	"follow_mouse": StateDelegate.State.new(_follow_mouse_state\
+	, _follow_mouse_enter_state\
+	, _follow_mouse_exit_state, "follow_mouse").add_ctx_properties(follow_mouse_ctx)
 }
 
 static func _follow_mouse_state(ctx: Dictionary) -> Variant:
